@@ -6,6 +6,18 @@
 	model = "Netgear Nighthawk X4S R7800";
 	compatible = "netgear,r7800", "qcom,ipq8065", "qcom,ipq8064";
 
+	aliases {
+		mdio-gpio0 = &mdio0;
+		/*
+		 * U-Boot searches for these entries and patches
+		 * 'local-mac-address'
+		 */
+		ethernet1 = &gmac1;
+		ethernet2 = &gmac2;
+		serial0 = &uart4;
+		serial1 = &uart2;
+	};
+
 	memory@0 {
 		reg = <0x42000000 0x1e000000>;
 		device_type = "memory";
@@ -425,18 +437,20 @@
 
 		gmac1: ethernet@37200000 {
 			status = "ok";
+			device_type = "network";
+			compatible = "qcom,nss-gmac";
 			phy-mode = "rgmii";
 			qcom,id = <1>;
-			qcom,phy_mdio_addr = <4>;
-			qcom,poll_required = <0>;
-			qcom,rgmii_delay = <1>;
-			qcom,phy_mii_type = <0>;
+			qcom,pcs-chanid = <1>;
+			qcom,phy-mdio-addr = <4>;
+			qcom,poll-required = <0>;
+			qcom,rgmii-delay = <0>;
 			qcom,emulation = <0>;
-			qcom,irq = <255>;
+			qcom,forced-speed = <1000>;
+			qcom,forced-duplex = <1>;
+			qcom,socver = <0>;
+			qcom,aux-clk-freq = <100000000>;
 			mdiobus = <&mdio0>;
-
-			pinctrl-0 = <&rgmii2_pins>;
-			pinctrl-names = "default";
 
 			mtd-mac-address = <&art 6>;
 
@@ -448,14 +462,19 @@
 
 		gmac2: ethernet@37400000 {
 			status = "ok";
+			device_type = "network";
+			compatible = "qcom,nss-gmac";
 			phy-mode = "sgmii";
 			qcom,id = <2>;
-			qcom,phy_mdio_addr = <0>;	/* none */
-			qcom,poll_required = <0>;	/* no polling */
-			qcom,rgmii_delay = <0>;
-			qcom,phy_mii_type = <1>;
+			qcom,pcs-chanid = <2>;
+			qcom,phy-mdio-addr = <0>;
+			qcom,poll-required = <0>;
+			qcom,rgmii-delay = <0>;
 			qcom,emulation = <0>;
-			qcom,irq = <258>;
+			qcom,forced-speed = <1000>;
+			qcom,forced-duplex = <1>;
+			qcom,socver = <0>;
+			qcom,aux-clk-freq = <100000000>;
 			mdiobus = <&mdio0>;
 
 			mtd-mac-address = <&art 0>;
